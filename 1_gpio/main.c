@@ -1,6 +1,9 @@
 #include <stdint.h>
 
 #define GPIO ((NRF_GPIO_REGS*)0x50000000)
+#define SW0_bt 1
+#define SW1_bt 2
+
 
 typedef struct {
 	volatile uint32_t RESERVED0[321];
@@ -18,15 +21,14 @@ typedef struct {
 } NRF_GPIO_REGS;
 
 void button_init(){ 
-	// Setting both
-	GPIO->PIN_CNF[1] = (3 << 2);
-	// Fill inn the configuration for the remaining buttons 
-	GPIO->PIN_CNF[2] = (3 << 2);
+	// Setting both Buttons for pull up on pin and as outputs
+	GPIO->PIN_CNF[SW0_bt] = (3 << 2) | (1 << 0);
+	GPIO->PIN_CNF[SW1_bt] = (3 << 2) | (1 << 0);
 }
 
 int main(){
 	// Configure LED Matrix
-	for(int i = 17; i <= 20; i++){
+	for(int i = 5; i <= 8; i++){
 		GPIO->DIRSET = (1 << i);
 		GPIO->OUTCLR = (1 << i);
 	}
